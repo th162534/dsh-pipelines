@@ -91,7 +91,6 @@ if (!hasRow) {
     '# 本地脚本流水线（由 scripts/apply-profile.mjs 写入）',
     '- id: dsh-pipelines',
     "  name: dsh-pipelines",
-    '  inject: [tools]',
     '  config:',
     `    root: ${repo.split(String.fromCharCode(92)).join('/')}/pipelines`,
     '    runs: C:/Users/ASUS/.dsh/runs',
