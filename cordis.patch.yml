@@ -1,10 +1,6 @@
+# 本插件自带的声明行：profile 的 dsh.profile.bundles 列出本包时，这一行会被合并进加载树。
+# 机器相关的路径放在 ~/.dsh/pipelines.config.json，不写进这里。
 - insert:
     - id: dsh-pipelines
       name: 'dsh-pipelines'
       inject: [tools]
-      config:
-        # 流水线目录；留空使用 ~/.dsh/pipelines
-        root: ''
-        # 运行记录目录；留空使用 ~/.dsh/runs
-        runs: ''
-        maxSteps: 20

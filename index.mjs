@@ -5,6 +5,11 @@ import { loadRegistry } from './lib/registry.mjs'
 import { buildCapabilities, capabilitiesText } from './lib/capabilities.mjs'
 import { listPipelines, runPipeline } from './lib/runner.mjs'
 
+// 模块被 import 即写一行日志：用来区分「插件没被加载」和「加载了但 apply 失败」
+try {
+  appendFileSync(join(homedir(), '.dsh', 'pipelines-load.log'), `${new Date().toISOString()} module imported\n`)
+} catch {}
+
 export const name = 'dsh-pipelines'
 export const inject = ['tools']
 
