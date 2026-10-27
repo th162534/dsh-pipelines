@@ -55,7 +55,7 @@ function loadLog(line) {
   } catch {}
 }
 
-export function apply(ctx, config = {}) {
+function applyInner(ctx, config = {}) {
   // 机器本地配置：~/.dsh/pipelines.config.json（不进仓库、不进 YAML patch）
   let local = {}
   try {
@@ -120,6 +120,15 @@ export function apply(ctx, config = {}) {
       return runPipeline(registry, String(args?.id || ''), args?.inputs || {}, { runs, maxSteps })
     },
   })
+  loadLog('3 tools registered')
+}
 
+export function apply(ctx, config = {}) {
+  try {
+    applyInner(ctx, config)
+  } catch (e) {
+    loadLog(`ERROR ${e && e.stack || e}`)
+    throw e
+  }
 }
 
