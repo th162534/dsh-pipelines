@@ -1,3 +1,4 @@
+import { appendFileSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { homedir } from 'node:os'
 import { loadRegistry } from './lib/registry.mjs'
@@ -47,11 +48,25 @@ const runOutput = {
   },
 }
 
+function loadLog(line) {
+  try {
+    const file = join(homedir(), '.dsh', 'pipelines-load.log')
+    appendFileSync(file, `${new Date().toISOString()} ${line}\n`)
+  } catch {}
+}
+
 export function apply(ctx, config = {}) {
-  const root = config.root || join(homedir(), '.dsh', 'pipelines')
-  const runs = config.runs || join(homedir(), '.dsh', 'runs')
-  const maxSteps = Math.max(1, Math.min(50, Number(config.maxSteps) || 20))
-  const expertsIndex = config.expertsIndex || ''
+  // 机器本地配置：~/.dsh/pipelines.config.json（不进仓库、不进 YAML patch）
+  let local = {}
+  try {
+    local = JSON.parse(readFileSync(join(homedir(), '.dsh', 'pipelines.config.json'), 'utf8'))
+  } catch {}
+  const pick = (key, fallback) => config[key] || local[key] || fallback
+  const root = pick('root', join(homedir(), '.dsh', 'pipelines'))
+  const runs = pick('runs', join(homedir(), '.dsh', 'runs'))
+  const maxSteps = Math.max(1, Math.min(50, Number(config.maxSteps || local.maxSteps) || 20))
+  const expertsIndex = config.expertsIndex || local.expertsIndex || ''
+  loadLog(`apply root=${root} runs=${runs} tools=${typeof ctx?.tools?.register}`)
 
   ctx.tools.register({
     name: 'capabilities',

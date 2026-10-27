@@ -58,7 +58,7 @@ if (!existsSync(pkgPath) || !existsSync(patchPath)) {
 const pkg = JSON.parse(await readFile(pkgPath, 'utf8'))
 const patch = await readFile(patchPath, 'utf8')
 const depKey = 'dsh-pipelines'
-const depValue = 'file:' + repo.split(String.fromCharCode(92)).join('/')
+const depValue = 'link:' + repo.split(String.fromCharCode(92)).join('/')
 const hasDep = Boolean(pkg.dependencies?.[depKey])
 const hasRow = patch.includes(`id: dsh-pipelines\r\n`) || patch.includes(`id: dsh-pipelines\n`) || /^- id: dsh-pipelines$/m.test(patch)
 
