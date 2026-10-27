@@ -1,0 +1,12 @@
+{
+  "id": "echo",
+  "title": "回显自测",
+  "when": { "keywords": ["echo", "自测"] },
+  "cost": "1 秒",
+  "requires": { "bin": ["node"] },
+  "inputs": { "text": { "type": "string", "default": "hello pipeline", "required": true } },
+  "steps": [
+    { "id": "write", "run": "node", "args": ["steps/echo.mjs"], "timeout": 15000, "out": "artifacts/echo.txt" }
+  ],
+  "verify": { "file": "artifacts/echo.txt" }
+}

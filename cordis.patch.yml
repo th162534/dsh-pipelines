@@ -1,0 +1,8 @@
+- insert:
+    - id: dsh-pipelines
+      name: 'dsh-pipelines'
+      inject: [tools]
+      config:
+        root: D:/dsh-plugins/dsh-pipelines/pipelines
+        runs: C:/Users/ASUS/.dsh/runs
+        maxSteps: 20

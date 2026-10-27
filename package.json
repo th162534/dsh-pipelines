@@ -1,0 +1,12 @@
+{
+  "name": "dsh-pipelines",
+  "version": "0.1.0",
+  "description": "本地脚本流水线：把确定性工作交给脚本，只把路径与摘要交回对话模型",
+  "type": "module",
+  "main": "index.mjs",
+  "exports": { ".": "./index.mjs", "./package.json": "./package.json" },
+  "dsh": { "bundle": { "patch": "./cordis.patch.yml" } },
+  "scripts": { "selftest": "node scripts/selftest.mjs" },
+  "engines": { "node": ">=20" },
+  "license": "MIT"
+}
