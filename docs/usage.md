@@ -34,6 +34,20 @@
 3. 步骤声明 `out` 时必须真生成该文件，否则运行判失败。
 4. `verify.file` 做最后验收。
 
+## 配置优先级
+
+插件启动时按这个顺序取配置，后者覆盖前者：
+
+1. `~/.dsh/pipelines.config.json`（机器级，改完重启生效）
+2. 声明行里的 `config`
+3. 代码内置默认值
+
+```json
+{ "root": "D:/dsh-plugins/dsh-pipelines/pipelines", "runs": "C:/Users/ASUS/.dsh/runs", "maxSteps": 20 }
+```
+
+`root` 指流水线目录，`runs` 指运行记录目录。加载、注册与异常都写 `~/.dsh/pipelines-load.log`：出现 `module imported` 说明模块被加载，出现 `register: xxx` 说明工具注册成功，`ERROR` 行带堆栈。
+
 ## 本机路径怎么配
 
 公开仓不写死盘符。把本机相关配置放进 `pipelines/<id>/pipeline.local.json`（已在 `.gitignore`）：

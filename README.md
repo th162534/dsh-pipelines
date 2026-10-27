@@ -44,23 +44,38 @@ scripts/selftest.mjs           自测
 
 ## 安装
 
-在 profile 的 `cordis.patch.yml` 加一行（`name` 指向本包，路径按实际放置）:
+本包自带 `cordis.patch.yml`，装进 profile 后声明行自动合并，不需要在 profile 里手写：
 
-```yaml
-- id: dsh-pipelines
-  name: 'dsh-pipelines'
-  inject: [tools]
-  config:
-    root: ''      # 留空 = ~/.dsh/pipelines
-    runs: ''      # 留空 = ~/.dsh/runs
+```bash
+dsh plugin --profile desktop add link:D:/dsh-plugins/dsh-pipelines
 ```
 
-流水线也可以直接放在本仓库的 `pipelines/` 下，用 `root` 指过去：
+自带的声明行只有三行，`config` 留空、不写盘符：
 
 ```yaml
-config:
-  root: D:/dsh-plugins/dsh-pipelines/pipelines
+- insert:
+    - id: dsh-pipelines
+      name: 'dsh-pipelines'
+      inject: [tools]
 ```
+
+### 配置优先级
+
+`~/.dsh/pipelines.config.json` → 声明行 `config` → 内置默认值。机器路径只写前者：
+
+```json
+{ "root": "D:/dsh-plugins/dsh-pipelines/pipelines", "runs": "C:/Users/ASUS/.dsh/runs" }
+```
+
+- `root`：流水线目录（默认 `~/.dsh/pipelines`）
+- `runs`：运行记录目录（默认 `~/.dsh/runs`）
+- `maxSteps`：单次运行最多步数（默认 20）
+
+改完重启应用生效；加载与注册过程写 `~/.dsh/pipelines-load.log`。
+
+### 已知限制
+
+`dsh-tools` 只接受 JSON Schema 子集：`type` 必须是**单个字符串**（写成数组会让整条工具注册失败），且不支持 `type` 与 `oneOf` 并存。写工具输出 schema 时按此收敛。
 
 ## 文档
 
