@@ -23,7 +23,7 @@ const listOutput = {
           type: 'object', required: ['id', 'title'],
           properties: {
             id: { type: 'string' }, title: { type: 'string' }, keywords: { type: 'array', items: { type: 'string' } },
-            cost: { type: ['string', 'null'] }, inputs: { type: 'array', items: { type: 'string' } }, steps: { type: 'array', items: { type: 'string' } },
+            cost: { type: 'string' }, inputs: { type: 'array', items: { type: 'string' } }, steps: { type: 'array', items: { type: 'string' } },
           },
         },
       },
@@ -73,6 +73,7 @@ function applyInner(ctx, config = {}) {
   const expertsIndex = config.expertsIndex || local.expertsIndex || ''
   loadLog(`apply root=${root} runs=${runs} tools=${typeof ctx?.tools?.register}`)
 
+  loadLog('register: capabilities')
   ctx.tools.register({
     name: 'capabilities',
     description: '列出本机可用的能力：脚本流水线（确定性任务）与专家（需要判断）。先查这里，再决定用流水线、派专家，还是自己做。',
@@ -97,6 +98,7 @@ function applyInner(ctx, config = {}) {
     },
   })
 
+  loadLog('register: pipeline_list')
   ctx.tools.register({
     name: 'pipeline_list',
     description: '列出本机可用的脚本流水线：id、标题、触发关键词、输入项、步骤。流水线由独立进程执行，不消耗对话 token，只回路径与摘要。',
@@ -108,6 +110,7 @@ function applyInner(ctx, config = {}) {
     },
   })
 
+  loadLog('register: pipeline_run')
   ctx.tools.register({
     name: 'pipeline_run',
     description: '执行一条本地脚本流水线，返回 runId、每步状态与产物路径（不含产物全文）。确定性任务优先用流水线，不要再派专家。',
