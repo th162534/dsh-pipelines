@@ -34,6 +34,26 @@ scripts/selftest.mjs           自测
 每次执行写入 `runs/<runId>/run.json`，产物在 `runs/<runId>/artifacts/`。
 步骤失败即停，保留已完成产物，`status` 为 `failed`，并标明失败步。
 
+## 安装
+
+在 profile 的 `cordis.patch.yml` 加一行（`name` 指向本包，路径按实际放置）:
+
+```yaml
+- id: dsh-pipelines
+  name: 'dsh-pipelines'
+  inject: [tools]
+  config:
+    root: ''      # 留空 = ~/.dsh/pipelines
+    runs: ''      # 留空 = ~/.dsh/runs
+```
+
+流水线也可以直接放在本仓库的 `pipelines/` 下，用 `root` 指过去：
+
+```yaml
+config:
+  root: D:/dsh-plugins/dsh-pipelines/pipelines
+```
+
 ## 自测
 
 ```bash

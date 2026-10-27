@@ -3,6 +3,8 @@
       name: 'dsh-pipelines'
       inject: [tools]
       config:
-        root: D:/dsh-plugins/dsh-pipelines/pipelines
-        runs: C:/Users/ASUS/.dsh/runs
+        # 流水线目录；留空使用 ~/.dsh/pipelines
+        root: ''
+        # 运行记录目录；留空使用 ~/.dsh/runs
+        runs: ''
         maxSteps: 20
