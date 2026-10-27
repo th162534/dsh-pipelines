@@ -4,8 +4,16 @@ DSH 本地脚本流水线插件。把确定性工作（下载、转写、抽帧�
 
 ## 工具
 
-- `pipeline_list`：列出可用流水线（id、标题、触发关键词、预计耗时）。
+- `capabilities`：一次看全本机能力（流水线 + 专家索引）。
+- `pipeline_list`：列出可用流水线（id、标题、触发关键词、预计耗时、输入项）。
 - `pipeline_run`：执行一条流水线，返回 `runId`、每步状态、产物路径。不返回产物全文。
+
+## 内置流水线
+
+| id | 用途 |
+|---|---|
+| `echo` | 自测：写一个文件，验证插件与执行器 |
+| `bili-evidence` | B 站视频证据整理：转写 + 抽帧 + OCR，产出 `transcript.md` |
 
 ## 目录
 
@@ -53,6 +61,11 @@ scripts/selftest.mjs           自测
 config:
   root: D:/dsh-plugins/dsh-pipelines/pipelines
 ```
+
+## 文档
+
+- [使用说明](docs/usage.md)
+- [设计说明](docs/design.md)
 
 ## 自测
 

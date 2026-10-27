@@ -1,0 +1,22 @@
+{
+  "id": "bili-evidence",
+  "title": "B站视频证据整理",
+  "when": { "keywords": ["bilibili", "b站", "BV号", "视频证据", "转写"] },
+  "cost": "1-3 分钟（取决于时长）",
+  "requires": { "bin": ["python"] },
+  "inputs": {
+    "url": { "type": "string", "required": true },
+    "start": { "type": "number" },
+    "end": { "type": "number" },
+    "maxFrames": { "type": "number", "default": 24 },
+    "policy": { "type": "string", "default": "text" },
+    "python": { "type": "string", "default": "" },
+    "bvScript": { "type": "string", "default": "" },
+    "cacheDir": { "type": "string", "default": "" }
+  },
+  "steps": [
+    { "id": "evidence", "run": "node", "args": ["steps/evidence.mjs"], "timeout": 1800000, "out": "artifacts/evidence.raw.json" },
+    { "id": "digest", "run": "node", "args": ["steps/digest.mjs"], "timeout": 60000, "out": "artifacts/transcript.md" }
+  ],
+  "verify": { "file": "artifacts/transcript.md" }
+}

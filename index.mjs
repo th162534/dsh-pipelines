@@ -1,6 +1,7 @@
 import { join } from 'node:path'
 import { homedir } from 'node:os'
 import { loadRegistry } from './lib/registry.mjs'
+import { buildCapabilities, capabilitiesText } from './lib/capabilities.mjs'
 import { listPipelines, runPipeline } from './lib/runner.mjs'
 
 export const name = 'dsh-pipelines'
@@ -50,6 +51,31 @@ export function apply(ctx, config = {}) {
   const root = config.root || join(homedir(), '.dsh', 'pipelines')
   const runs = config.runs || join(homedir(), '.dsh', 'runs')
   const maxSteps = Math.max(1, Math.min(50, Number(config.maxSteps) || 20))
+  const expertsIndex = config.expertsIndex || ''
+
+  ctx.tools.register({
+    name: 'capabilities',
+    description: '列出本机可用的能力：脚本流水线（确定性任务）与专家（需要判断）。先查这里，再决定用流水线、派专家，还是自己做。',
+    parameters: {
+      type: 'object', additionalProperties: false,
+      properties: { detail: { type: 'string', enum: ['short', 'full'], default: 'short' } },
+    },
+    output: {
+      schema: {
+        type: 'object', required: ['text'], additionalProperties: false,
+        properties: { text: { type: 'string' }, pipelines: { type: 'array' }, experts: { type: 'array' } },
+      },
+      render: (_args, value) => [{ type: 'text', text: value.text }],
+    },
+    async execute(args) {
+      const cap = await buildCapabilities({ root, expertsIndex })
+      const full = await (async () => {
+        const registry = await loadRegistry(root)
+        return registry.pipelines.map(p => ({ id: p.id, title: p.title, keywords: p.when?.keywords || [], inputs: Object.keys(p.inputs || {}) }))
+      })()
+      return { text: capabilitiesText(cap), pipelines: full, experts: cap.experts }
+    },
+  })
 
   ctx.tools.register({
     name: 'pipeline_list',
